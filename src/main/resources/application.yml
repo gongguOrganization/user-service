@@ -1,0 +1,26 @@
+server:
+  port: 9090
+spring:
+  devtools:
+  livereload:
+    enabled: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/gonggu?allowPublicKeyRetrieval=true&serverTimezone=UTC&amp
+    characterEncoding: UTF-8
+    username: root
+    password: 1234
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: user-service
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+jwt:
+  header: Authorization
+  expTime: 86400000
+  secret_key: my-very-secret-keymy-very-secret-keymy-very-secret-keymy-very-secret-keymy-very-secret-key
