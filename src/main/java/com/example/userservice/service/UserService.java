@@ -1,10 +1,9 @@
 package com.example.userservice.service;
 
 
-import com.example.userservice.dto.LoginDto;
 import com.example.userservice.dto.RegiDto;
-import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserService {
@@ -17,4 +16,14 @@ public interface UserService {
 
     Map<String, String> getBankAccount(int id);
 
+    ////////mj
+    Boolean checkMyPw(int idAtToken, String password);
+
+    RegiDto getMyInfo(int idAtToken);
+
+    String getMyPw(int idAtToken);
+
+    Boolean updateMyInfo(RegiDto userDto);
+
+    List<RegiDto> getIdList(List<Integer> userIdList);
 }

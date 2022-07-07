@@ -1,26 +1,21 @@
 server:
-  port: 9090
+  port: 0
+
 spring:
   devtools:
-  livereload:
-    enabled: true
-  datasource:
-    url: jdbc:mysql://localhost:3306/gonggu?allowPublicKeyRetrieval=true&serverTimezone=UTC&amp
-    characterEncoding: UTF-8
-    username: root
-    password: 1234
+    livereload:
+      enabled: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   application:
     name: user-service
+
 eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
-jwt:
-  header: Authorization
-  expTime: 86400000
-  secret_key: my-very-secret-keymy-very-secret-keymy-very-secret-keymy-very-secret-keymy-very-secret-key
