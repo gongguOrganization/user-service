@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import lombok.Data;
 import javax.persistence.*;
 
 
@@ -31,5 +32,6 @@ public class RegiDto {
     private String bank;
     @Column(name = "BANK_ACCOUNT")
     private String bankaccount;
+
 
 }

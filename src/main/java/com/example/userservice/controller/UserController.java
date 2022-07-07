@@ -29,6 +29,7 @@ public class UserController {
     @PostMapping("/login")
     public Map login(@RequestBody RegiDto regiDto) {
         RegiDto loginUser = userService.login(regiDto);
+
         String token = securityService.createToken(loginUser.getId().toString());
         Map<String,Object> map=new HashMap<>();
         map.put("token",token);
@@ -54,10 +55,6 @@ public class UserController {
         return userService.regiUser(userDto);
     }
 
-//    @PostMapping("/join")
-//    public RegiDto createUser(@RequestBody RegiDto userDto) {
-//        return userService.regiUser(userDto);
-//    }
 
     @GetMapping("/checkId/{userId}")
     public boolean checkId(@PathVariable String userId) {
