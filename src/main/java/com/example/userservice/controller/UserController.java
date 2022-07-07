@@ -7,8 +7,11 @@ import com.example.userservice.dto.TokenDto;
 import com.example.userservice.dto.UserRequestDto;
 import com.example.userservice.dto.UserResponseDto;
 import com.example.userservice.service.UserService;
+import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -26,15 +29,40 @@ public class UserController {
     UserService userService;
     @Autowired
     SecurityService securityService;
+    @Value("${jwt.expTime}")
+    long expTime;
+
+//    @PostMapping("/login")
+//    public Map login(@RequestBody RegiDto regiDto) {
+//        RegiDto loginUser = userService.login(regiDto);
+//
+//        String token = securityService.createToken(loginUser.getId().toString());
+//        Map<String,Object> map=new HashMap<>();
+//        Map<String, Object> headers = new HashMap<>();
+//        map.put("token",token);
+//        map.put("id",loginUser.getId());
+//
+//
+//        return map;
+//    }
+
     @PostMapping("/login")
-    public Map login(@RequestBody RegiDto regiDto) {
+    public ResponseEntity<String> login(@RequestBody RegiDto regiDto) {
         RegiDto loginUser = userService.login(regiDto);
 
         String token = securityService.createToken(loginUser.getId().toString());
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Authorization","Bearer "+token);
         Map<String,Object> map=new HashMap<>();
-        map.put("token",token);
+        Map<String, Object> headers = new HashMap<>();
+        //map.put("token",token);
         map.put("id",loginUser.getId());
-        return map;
+
+
+        return ResponseEntity.
+                ok().
+                headers(responseHeaders).
+                body(loginUser.getId().toString());
     }
 
     @GetMapping("/token")
