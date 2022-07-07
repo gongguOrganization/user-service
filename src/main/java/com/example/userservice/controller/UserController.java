@@ -6,6 +6,9 @@ import com.example.userservice.dto.RegiDto;
 import com.example.userservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -25,14 +28,27 @@ public class UserController {
 
     @Autowired
     SecurityService securityService;
+
+    @Value("${jwt.expTime}")
+    long expTime;
+
     @PostMapping("/login")
-    public Map login(@RequestBody RegiDto userDto) {
-        RegiDto loginUser = userService.login(userDto);
+    public ResponseEntity<String> login(@RequestBody RegiDto regiDto) {
+        RegiDto loginUser = userService.login(regiDto);
+
         String token = securityService.createToken(loginUser.getId().toString());
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Authorization","Bearer "+token);
         Map<String,Object> map=new HashMap<>();
-        map.put("token",token);
+        Map<String, Object> headers = new HashMap<>();
+        //map.put("token",token);
         map.put("id",loginUser.getId());
-        return map;
+
+
+        return ResponseEntity.
+                ok().
+                headers(responseHeaders).
+                body(loginUser.getId().toString());
     }
 
     @GetMapping("/token")
@@ -53,11 +69,11 @@ public class UserController {
         return userService.regiUser(userDto);
     }
 
+
     @GetMapping("/checkId/{userId}")
     public boolean checkId(@PathVariable String userId) {
         return userService.checkId(userId);
     }
-
     ///////////////MJ
     @PostMapping("/checkPw")
     public Boolean checkMyPw(HttpServletRequest request, @RequestBody RegiDto userDto ){

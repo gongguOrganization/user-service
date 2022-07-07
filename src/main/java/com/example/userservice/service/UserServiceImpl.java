@@ -4,6 +4,8 @@ import com.example.userservice.dto.RegiDto;
 import com.example.userservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,14 +19,18 @@ public class UserServiceImpl implements UserService{
     @Autowired
     UserRepository userRepository;
 
-    @Override
-    public RegiDto regiUser(RegiDto userDto)
-    {
-        System.out.println("service >>>> ");
-        System.out.println(userDto);
-        if(userRepository.findByUserId(userDto.getUserId())==null ){
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-            return userRepository.save(userDto);
+    @Autowired
+    AuthenticationManagerBuilder managerBuilder;
+    @Override
+    public RegiDto regiUser(RegiDto regiDto)
+    {
+        if (userRepository.findByUserId(regiDto.getUserId()) == null) {
+            String s_password=passwordEncoder.encode(regiDto.getPassword());
+            regiDto.setPassword(s_password);
+            return userRepository.save(regiDto);
         } else {
             return null;
         }
@@ -33,9 +39,16 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public RegiDto login(RegiDto userDto){
-
-        return userRepository.findByUserIdAndPassword( userDto.getUserId(), userDto.getPassword());
-
+        RegiDto user=userRepository.findByUserId(userDto.getUserId());
+        String s_password=user.getPassword();
+//        System.out.println("s_password"+s_password);
+//        System.out.println("r_password"+userDto.getUserId());
+        if (passwordEncoder.matches(userDto.getPassword(),s_password)){
+            return userRepository.findByUserIdAndPassword( userDto.getUserId(), s_password);
+        }
+        else{
+            return null;
+        }
     }
 
     @Override

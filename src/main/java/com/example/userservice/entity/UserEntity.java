@@ -1,6 +1,9 @@
 package com.example.userservice.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -8,6 +11,9 @@ import javax.persistence.*;
 @Table(name="member")
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @DynamicInsert
 public class UserEntity {
     @Id
