@@ -33,7 +33,7 @@ public class UserController {
     long expTime;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody RegiDto regiDto) {
+    public ResponseEntity<Map> login(@RequestBody RegiDto regiDto) {
         RegiDto loginUser = userService.login(regiDto);
 
         String token = securityService.createToken(loginUser.getId().toString());
@@ -41,14 +41,13 @@ public class UserController {
         responseHeaders.set("Authorization","Bearer "+token);
         Map<String,Object> map=new HashMap<>();
         Map<String, Object> headers = new HashMap<>();
-        //map.put("token",token);
+        map.put("token",token);
         map.put("id",loginUser.getId());
-
 
         return ResponseEntity.
                 ok().
                 headers(responseHeaders).
-                body(loginUser.getId().toString());
+                body(map);
     }
 
     @GetMapping("/token")
@@ -95,8 +94,13 @@ public class UserController {
     }
 
     @GetMapping("/getIdList")
-    public List<RegiDto> getIdList(List<Integer> userIdList){
+    public List<RegiDto> getIdList(@RequestParam List<Integer> userIdList){
         return userService.getIdList(userIdList);
+    }
+
+    @GetMapping("/getBankAccount/{id}")
+    public Map<String, String> getBankAccount(@PathVariable int id) {
+        return userService.getBankAccount(id);
     }
 
 }

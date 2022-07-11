@@ -69,8 +69,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public Boolean checkMyPw(int idAtToken, String password) {
         RegiDto userDto = userRepository.findById(idAtToken);
-        String dbPw = userDto.getPassword();
-        return dbPw.equals(password);
+        //String s_password=passwordEncoder.encode(password);
+        //userDto.setPassword(s_password);
+//        if (passwordEncoder.matches(userDto.getPassword(),s_password)){
+//            return userRepository.findByUserIdAndPassword( userDto.getUserId(), s_password);
+//
+//        String dbPw = userDto.getPassword();
+        return passwordEncoder.matches(password, userDto.getPassword());
     }
 
     @Override
